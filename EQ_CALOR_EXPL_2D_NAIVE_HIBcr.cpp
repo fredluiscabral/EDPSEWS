@@ -104,6 +104,7 @@ int main (int argc , char * argv[]){
         k++;
         tempo = (double)(k * deltaT);
 
+        #pragma omp simd
         #pragma omp parallel for
         for (int i = 1 ; i <= nN ; i++) {
             for (int j = 1 ; j <= N-2 ; j++) {
@@ -124,6 +125,7 @@ int main (int argc , char * argv[]){
                 MPI_Recv(U_old + (nN + 1) * (NP + 1), NP + 1, MPI_DOUBLE, vizSul, 0, MPI_COMM_WORLD, &status);
         }
 
+        #pragma omp simd
         #pragma omp parallel for
 	    for (int i = 1 ; i <= nN ; i++) {
             for (int j = 1 ; j <= N-2 ; j++) {
@@ -145,6 +147,7 @@ int main (int argc , char * argv[]){
                 MPI_Recv(U_old + (nN + 1) * (NP + 1), NP + 1, MPI_DOUBLE, vizSul, 0, MPI_COMM_WORLD, &status);
         }
 
+        #pragma omp simd
         #pragma omp parallel for
         for (int i = 1 ; i <= nN ; i++) {
             for (int j = 1 ; j <= N-2 ; j++) {
@@ -166,6 +169,7 @@ int main (int argc , char * argv[]){
                 MPI_Recv(U_new + (nN + 1) * (NP + 1), NP + 1, MPI_DOUBLE, vizSul, 0, MPI_COMM_WORLD, &status);
         }
 
+        #pragma omp simd
         #pragma omp parallel for
         for (int i = 1 ; i <= nN ; i++) {
             for (int j = 1 ; j <= N-2 ; j++) {

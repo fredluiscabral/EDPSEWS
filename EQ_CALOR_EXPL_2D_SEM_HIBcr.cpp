@@ -135,6 +135,7 @@ int main(int argc, char* argv[]) {
             tempo = (double)(k * deltaT);
 
             // Etapa 1: Calcular valores pares
+            #pragma omp simd
             for (int i = iLocal; i <= fLocal; i++) {
                 for (int j = 1; j <= N - 2; j++) {
                     if ((i + j + m) % 2 == 0) {
@@ -160,6 +161,7 @@ int main(int argc, char* argv[]) {
             }
 
             // Etapa 2: Calcular valores ímpares
+            #pragma omp simd
             for (int i = iLocal; i <= fLocal; i++) {
                 for (int j = 1; j <= N - 2; j++) {
                     if ((i + j + m) % 2 == 1) {
@@ -185,6 +187,7 @@ int main(int argc, char* argv[]) {
             }
 
             // Etapa 3: Calcular valores pares
+            #pragma omp simd
             for (int i = iLocal; i <= fLocal; i++) {
                 for (int j = 1; j <= N - 2; j++) {
                     if ((i + j + m) % 2 == 0) {
@@ -210,6 +213,7 @@ int main(int argc, char* argv[]) {
             }
 
             // Etapa 4: Calcular valores ímpares
+            #pragma omp simd
             for (int i = iLocal; i <= fLocal; i++) {
                 for (int j = 1; j <= N - 2; j++) {
                     if ((i + j + m) % 2 == 1) {
