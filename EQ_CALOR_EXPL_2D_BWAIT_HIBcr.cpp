@@ -270,7 +270,7 @@ int main (int argc , char * argv[]){
               0, MPI_COMM_WORLD);
 
   if (myRank == 0) {
-      cout << "# Tempo = " << (double)(t_fim - t_ini) << " segundos ..." << endl;
+      cout << "#Versao Busy Wait: Tempo = " << (double)(t_fim - t_ini) << " segundos ..." << endl;
 
       // Salvar U_total para plotagem no Python
       ofstream outfile("output_data.txt");
