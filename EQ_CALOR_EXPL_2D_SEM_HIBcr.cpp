@@ -14,8 +14,8 @@ double x, y, h, velX, velY, tempoFinal, deltaT, deltaX, deltaY, alfa, beta_coef,
 double t_ini, t_fim;
 long int N, contagemTempo, nN, NP, m = 0;
 int myRank, numProcs, numLocalPontos, inicioLocal, finalLocal, resto, vizNorte, vizSul;
-sem_t semaphores_left[280];  // Semáforos para sincronização à esquerda
-sem_t semaphores_right[280]; // Semáforos para sincronização à direita
+sem_t semaphores_left[680];  // Semáforos para sincronização à esquerda
+sem_t semaphores_right[680]; // Semáforos para sincronização à direita
 
 double pulso(double D, double xo, double yo, double x, double y) {
     return (exp(-D * ((x - xo) * (x - xo) + (y - yo) * (y - yo))));

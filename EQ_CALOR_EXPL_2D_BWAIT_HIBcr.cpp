@@ -16,7 +16,7 @@ double xTil , yTil , suporteInferior , suporteSuperior;
 
 long int N , contagemTempo, nN, NP, m=0;
 int myRank , numProcs , numLocalPontos, inicioLocal, finalLocal, resto, vizNorte , vizSul;
-int lock[280];
+int lock[680];
 
 double pulso (double D , double xo , double yo , double x , double y) {
   return (exp(-D*((x-xo)*(x-xo) + (y-yo)*(y-yo))));
