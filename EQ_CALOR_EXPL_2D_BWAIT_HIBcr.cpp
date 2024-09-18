@@ -84,7 +84,8 @@ int main (int argc , char * argv[]){
   alfa = (gama * deltaT) / (deltaX * deltaX);
   beta_coef  = (gama * deltaT) / (deltaY * deltaY);
 
-  t_ini = omp_get_wtime();
+  if (myRank == 0)
+  	t_ini = omp_get_wtime();
 
   #pragma omp parallel
   { 
@@ -244,7 +245,8 @@ int main (int argc , char * argv[]){
 
   }
 
-  t_fim = omp_get_wtime();
+  if (myRank == 0)  
+  	t_fim = omp_get_wtime();
 
   // Preparação para coleta dos dados
   double *U_total = nullptr;
@@ -252,6 +254,8 @@ int main (int argc , char * argv[]){
   int *displs = nullptr;
 
   if (myRank == 0) {
+      cout << "#Versao Busy Wait: Tempo = " << (double)(t_fim - t_ini) << " segundos ..." << endl;
+
       U_total = (double *) malloc((N*(N+1))*sizeof(double));
       recvcounts = (int *) malloc(numProcs * sizeof(int));
       displs = (int *) malloc(numProcs * sizeof(int));
@@ -270,7 +274,7 @@ int main (int argc , char * argv[]){
               0, MPI_COMM_WORLD);
 
   if (myRank == 0) {
-      cout << "#Versao Busy Wait: Tempo = " << (double)(t_fim - t_ini) << " segundos ..." << endl;
+/*      cout << "#Versao Busy Wait: Tempo = " << (double)(t_fim - t_ini) << " segundos ..." << endl;
 
       // Salvar U_total para plotagem no Python
       ofstream outfile("output_data.txt");
@@ -287,7 +291,7 @@ int main (int argc , char * argv[]){
       } else {
           cerr << "Erro ao abrir o arquivo para escrita." << endl;
       }
-
+*/
       free(U_total);
       free(recvcounts);
       free(displs);
