@@ -252,7 +252,7 @@ int main(int argc, char* argv[]) {
 
   if (myRank == 0) {
       cout << "#Versao Semaforo: Tempo = " << (double)(t_fim - t_ini) << " segundos ..." << endl;
-
+/*
       // Abre um arquivo para saída dos dados
       ofstream outfile("output_data.txt");
       if (outfile.is_open()) {
@@ -268,7 +268,7 @@ int main(int argc, char* argv[]) {
       } else {
           cerr << "Erro ao abrir o arquivo para escrita." << endl;
       }
-
+*/
       free(U_total);
       free(recvcounts);
       free(displs);
