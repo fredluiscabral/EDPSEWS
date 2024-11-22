@@ -251,7 +251,7 @@ int main(int argc, char* argv[]) {
               0, MPI_COMM_WORLD);
 
   if (myRank == 0) {
-      cout << "#Versao Semaforo: Tempo = " << (double)(t_fim - t_ini) << " segundos ..." << endl;
+      cout << "#Versao Semaforo: Tempo = " << (double)(t_fim - t_ini) << " segundos ..." << "Tile de tamanho " << TILE << endl;
 /*
       // Abre um arquivo para saída dos dados
       ofstream outfile("output_data.txt");
