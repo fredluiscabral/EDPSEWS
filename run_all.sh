@@ -4,11 +4,14 @@
 DIFFUSION_COEF=0.1
 FINAL_TIME=0.0000025
 DELTA_TIME=0.000000025
-N=5000  # Número de pontos no grid
+N=4096  # Número de pontos no grid
 
 # Número de processos MPI fixo e número máximo de threads
 MPI_PROCS=1  # Número fixo de processos MPI (1 por socket)
 MAX_THREADS=128  # Número máximo de threads por processo
+
+# Lista de valores de TILE (especifique os valores desejados aqui)
+TILE_VALUES=(1 8 16 32 128 256 512 1024)
 
 # Arquivo de saída
 OUTPUT_FILE="output.txt"
@@ -22,8 +25,8 @@ for THREADS in $(seq 1 $MAX_THREADS); do
 
   echo "Running with $MPI_PROCS MPI processes and $THREADS threads per process" | tee -a $OUTPUT_FILE
 
-  # Loop para variar o tamanho do TILE
-  for TILE in $(seq 10 10 $N); do
+  # Loop para valores específicos de TILE
+  for TILE in "${TILE_VALUES[@]}"; do
     echo "Executing with TILE=$TILE" | tee -a $OUTPUT_FILE
 
     echo "Executing EQ_CALOR_EXPL_2D_NAIVE_HIBcr with $THREADS threads and TILE=$TILE" | tee -a $OUTPUT_FILE
