@@ -22,6 +22,7 @@ double pulso(double D, double xo, double yo, double x, double y) {
 
 int main(int argc, char* argv[]) {
     MPI_Status status;
+    MPI_Request req[4]; // Para até 4 operações: 2 sends e 2 receives
 
     MPI_Init(&argc, &argv);
     MPI_Comm_rank(MPI_COMM_WORLD, &myRank);
@@ -121,14 +122,14 @@ int main(int argc, char* argv[]) {
             }
         }
 
-        // Troca de mensagens MPI após o primeiro loop
         if (vizNorte != MPI_PROC_NULL) {
-            MPI_Send(U_old + (NP + 1), NP + 1, MPI_DOUBLE, vizNorte, 0, MPI_COMM_WORLD);
-            MPI_Recv(U_old, NP + 1, MPI_DOUBLE, vizNorte, 0, MPI_COMM_WORLD, &status);
+            MPI_Isend(U_old + (NP + 1), NP + 1, MPI_DOUBLE, vizNorte, 0, MPI_COMM_WORLD, &req[0]);
+            MPI_Irecv(U_old, NP + 1, MPI_DOUBLE, vizNorte, 0, MPI_COMM_WORLD, &req[1]);
         }
+
         if (vizSul != MPI_PROC_NULL) {
-            MPI_Send(U_old + nN * (NP + 1), NP + 1, MPI_DOUBLE, vizSul, 0, MPI_COMM_WORLD);
-            MPI_Recv(U_old + (nN + 1) * (NP + 1), NP + 1, MPI_DOUBLE, vizSul, 0, MPI_COMM_WORLD, &status);
+            MPI_Isend(U_old + nN * (NP + 1), NP + 1, MPI_DOUBLE, vizSul, 0, MPI_COMM_WORLD, &req[2]);
+            MPI_Irecv(U_old + (nN + 1) * (NP + 1), NP + 1, MPI_DOUBLE, vizSul, 0, MPI_COMM_WORLD, &req[3]);
         }
 
         // Segundo loop: Atualização dos pontos (i+j+m) % 2 == 1
@@ -153,12 +154,13 @@ int main(int argc, char* argv[]) {
 
         // Troca de mensagens MPI após o segundo loop
         if (vizNorte != MPI_PROC_NULL) {
-            MPI_Send(U_old + (NP + 1), NP + 1, MPI_DOUBLE, vizNorte, 0, MPI_COMM_WORLD);
-            MPI_Recv(U_old, NP + 1, MPI_DOUBLE, vizNorte, 0, MPI_COMM_WORLD, &status);
+            MPI_Isend(U_old + (NP + 1), NP + 1, MPI_DOUBLE, vizNorte, 0, MPI_COMM_WORLD, &req[0]);
+            MPI_Irecv(U_old, NP + 1, MPI_DOUBLE, vizNorte, 0, MPI_COMM_WORLD, &req[1]);
         }
+
         if (vizSul != MPI_PROC_NULL) {
-            MPI_Send(U_old + nN * (NP + 1), NP + 1, MPI_DOUBLE, vizSul, 0, MPI_COMM_WORLD);
-            MPI_Recv(U_old + (nN + 1) * (NP + 1), NP + 1, MPI_DOUBLE, vizSul, 0, MPI_COMM_WORLD, &status);
+            MPI_Isend(U_old + nN * (NP + 1), NP + 1, MPI_DOUBLE, vizSul, 0, MPI_COMM_WORLD, &req[2]);
+            MPI_Irecv(U_old + (nN + 1) * (NP + 1), NP + 1, MPI_DOUBLE, vizSul, 0, MPI_COMM_WORLD, &req[3]);
         }
 
         // Terceiro loop: Atualização dos pontos (i+j+m) % 2 == 0
@@ -184,12 +186,13 @@ int main(int argc, char* argv[]) {
 
         // Troca de mensagens MPI após o terceiro loop
         if (vizNorte != MPI_PROC_NULL) {
-            MPI_Send(U_new + (NP + 1), NP + 1, MPI_DOUBLE, vizNorte, 0, MPI_COMM_WORLD);
-            MPI_Recv(U_new, NP + 1, MPI_DOUBLE, vizNorte, 0, MPI_COMM_WORLD, &status);
+            MPI_Isend(U_old + (NP + 1), NP + 1, MPI_DOUBLE, vizNorte, 0, MPI_COMM_WORLD, &req[0]);
+            MPI_Irecv(U_old, NP + 1, MPI_DOUBLE, vizNorte, 0, MPI_COMM_WORLD, &req[1]);
         }
+
         if (vizSul != MPI_PROC_NULL) {
-            MPI_Send(U_new + nN * (NP + 1), NP + 1, MPI_DOUBLE, vizSul, 0, MPI_COMM_WORLD);
-            MPI_Recv(U_new + (nN + 1) * (NP + 1), NP + 1, MPI_DOUBLE, vizSul, 0, MPI_COMM_WORLD, &status);
+            MPI_Isend(U_old + nN * (NP + 1), NP + 1, MPI_DOUBLE, vizSul, 0, MPI_COMM_WORLD, &req[2]);
+            MPI_Irecv(U_old + (nN + 1) * (NP + 1), NP + 1, MPI_DOUBLE, vizSul, 0, MPI_COMM_WORLD, &req[3]);
         }
 
         // Quarto loop: Atualização dos pontos (i+j+m) % 2 == 1
@@ -214,12 +217,13 @@ int main(int argc, char* argv[]) {
 
         // Troca de mensagens MPI após o quarto loop
         if (vizNorte != MPI_PROC_NULL) {
-            MPI_Send(U_new + (NP + 1), NP + 1, MPI_DOUBLE, vizNorte, 0, MPI_COMM_WORLD);
-            MPI_Recv(U_new, NP + 1, MPI_DOUBLE, vizNorte, 0, MPI_COMM_WORLD, &status);
+            MPI_Isend(U_old + (NP + 1), NP + 1, MPI_DOUBLE, vizNorte, 0, MPI_COMM_WORLD, &req[0]);
+            MPI_Irecv(U_old, NP + 1, MPI_DOUBLE, vizNorte, 0, MPI_COMM_WORLD, &req[1]);
         }
+
         if (vizSul != MPI_PROC_NULL) {
-            MPI_Send(U_new + nN * (NP + 1), NP + 1, MPI_DOUBLE, vizSul, 0, MPI_COMM_WORLD);
-            MPI_Recv(U_new + (nN + 1) * (NP + 1), NP + 1, MPI_DOUBLE, vizSul, 0, MPI_COMM_WORLD, &status);
+            MPI_Isend(U_old + nN * (NP + 1), NP + 1, MPI_DOUBLE, vizSul, 0, MPI_COMM_WORLD, &req[2]);
+            MPI_Irecv(U_old + (nN + 1) * (NP + 1), NP + 1, MPI_DOUBLE, vizSul, 0, MPI_COMM_WORLD, &req[3]);
         }
 
         m++;

@@ -150,15 +150,27 @@ int main(int argc, char* argv[]) {
 
             // Comunicação MPI após o primeiro loop
             if (tid == 0 || tid == nt - 1) {
+                MPI_Request req[4]; // Array para gerenciar múltiplas requisições
+                int req_count = 0;  // Contador de requisições ativas
+
+                // Comunicação com o vizinho do norte
                 if (tid == 0 && vizNorte != MPI_PROC_NULL) {
-                    MPI_Send(U_old + (NP + 1), NP + 1, MPI_DOUBLE, vizNorte, 0, MPI_COMM_WORLD);
-                    MPI_Recv(U_old, NP + 1, MPI_DOUBLE, vizNorte, 0, MPI_COMM_WORLD, &status);
+                    MPI_Isend(U_old + (NP + 1), NP + 1, MPI_DOUBLE, vizNorte, 0, MPI_COMM_WORLD, &req[req_count++]);
+                    MPI_Irecv(U_old, NP + 1, MPI_DOUBLE, vizNorte, 0, MPI_COMM_WORLD, &req[req_count++]);
                 }
+
+                // Comunicação com o vizinho do sul
                 if (tid == nt - 1 && vizSul != MPI_PROC_NULL) {
-                    MPI_Send(U_old + nN * (NP + 1), NP + 1, MPI_DOUBLE, vizSul, 0, MPI_COMM_WORLD);
-                    MPI_Recv(U_old + (nN + 1) * (NP + 1), NP + 1, MPI_DOUBLE, vizSul, 0, MPI_COMM_WORLD, &status);
+                    MPI_Isend(U_old + nN * (NP + 1), NP + 1, MPI_DOUBLE, vizSul, 0, MPI_COMM_WORLD, &req[req_count++]);
+                    MPI_Irecv(U_old + (nN + 1) * (NP + 1), NP + 1, MPI_DOUBLE, vizSul, 0, MPI_COMM_WORLD, &req[req_count++]);
+                }
+
+                // Sincronizar todas as requisições não bloqueantes
+                if (req_count > 0) {
+                    MPI_Waitall(req_count, req, MPI_STATUSES_IGNORE);
                 }
             }
+
 
             // Segundo loop: (i+j+m) % 2 == 1
             for (int i_tile = iLocal; i_tile <= fLocal; i_tile += TILE) {
@@ -180,6 +192,28 @@ int main(int argc, char* argv[]) {
             signal_done(tid, nt);
             wait_for_neighbors(tid, nt);
 
+            if (tid == 0 || tid == nt - 1) {
+                MPI_Request req[4]; // Array para gerenciar múltiplas requisições
+                int req_count = 0;  // Contador de requisições ativas
+
+                // Comunicação com o vizinho do norte
+                if (tid == 0 && vizNorte != MPI_PROC_NULL) {
+                    MPI_Isend(U_old + (NP + 1), NP + 1, MPI_DOUBLE, vizNorte, 0, MPI_COMM_WORLD, &req[req_count++]);
+                    MPI_Irecv(U_old, NP + 1, MPI_DOUBLE, vizNorte, 0, MPI_COMM_WORLD, &req[req_count++]);
+                }
+
+                // Comunicação com o vizinho do sul
+                if (tid == nt - 1 && vizSul != MPI_PROC_NULL) {
+                    MPI_Isend(U_old + nN * (NP + 1), NP + 1, MPI_DOUBLE, vizSul, 0, MPI_COMM_WORLD, &req[req_count++]);
+                    MPI_Irecv(U_old + (nN + 1) * (NP + 1), NP + 1, MPI_DOUBLE, vizSul, 0, MPI_COMM_WORLD, &req[req_count++]);
+                }
+
+                // Sincronizar todas as requisições não bloqueantes
+                if (req_count > 0) {
+                    MPI_Waitall(req_count, req, MPI_STATUSES_IGNORE);
+                }
+            }
+
             // Terceiro loop: (i+j+m) % 2 == 0
             for (int i_tile = iLocal; i_tile <= fLocal; i_tile += TILE) {
                 for (int j_tile = 1; j_tile <= N - 2; j_tile += TILE) {
@@ -198,6 +232,29 @@ int main(int argc, char* argv[]) {
 
             signal_done(tid, nt);
             wait_for_neighbors(tid, nt);
+
+            if (tid == 0 || tid == nt - 1) {
+                MPI_Request req[4]; // Array para gerenciar múltiplas requisições
+                int req_count = 0;  // Contador de requisições ativas
+
+                // Comunicação com o vizinho do norte
+                if (tid == 0 && vizNorte != MPI_PROC_NULL) {
+                    MPI_Isend(U_old + (NP + 1), NP + 1, MPI_DOUBLE, vizNorte, 0, MPI_COMM_WORLD, &req[req_count++]);
+                    MPI_Irecv(U_old, NP + 1, MPI_DOUBLE, vizNorte, 0, MPI_COMM_WORLD, &req[req_count++]);
+                }
+
+                // Comunicação com o vizinho do sul
+                if (tid == nt - 1 && vizSul != MPI_PROC_NULL) {
+                    MPI_Isend(U_old + nN * (NP + 1), NP + 1, MPI_DOUBLE, vizSul, 0, MPI_COMM_WORLD, &req[req_count++]);
+                    MPI_Irecv(U_old + (nN + 1) * (NP + 1), NP + 1, MPI_DOUBLE, vizSul, 0, MPI_COMM_WORLD, &req[req_count++]);
+                }
+
+                // Sincronizar todas as requisições não bloqueantes
+                if (req_count > 0) {
+                    MPI_Waitall(req_count, req, MPI_STATUSES_IGNORE);
+                }
+            }
+
 
             // Quarto loop: (i+j+m) % 2 == 1
             for (int i_tile = iLocal; i_tile <= fLocal; i_tile += TILE) {
@@ -218,6 +275,29 @@ int main(int argc, char* argv[]) {
 
             signal_done(tid, nt);
             wait_for_neighbors(tid, nt);
+
+            if (tid == 0 || tid == nt - 1) {
+                MPI_Request req[4]; // Array para gerenciar múltiplas requisições
+                int req_count = 0;  // Contador de requisições ativas
+
+                // Comunicação com o vizinho do norte
+                if (tid == 0 && vizNorte != MPI_PROC_NULL) {
+                    MPI_Isend(U_old + (NP + 1), NP + 1, MPI_DOUBLE, vizNorte, 0, MPI_COMM_WORLD, &req[req_count++]);
+                    MPI_Irecv(U_old, NP + 1, MPI_DOUBLE, vizNorte, 0, MPI_COMM_WORLD, &req[req_count++]);
+                }
+
+                // Comunicação com o vizinho do sul
+                if (tid == nt - 1 && vizSul != MPI_PROC_NULL) {
+                    MPI_Isend(U_old + nN * (NP + 1), NP + 1, MPI_DOUBLE, vizSul, 0, MPI_COMM_WORLD, &req[req_count++]);
+                    MPI_Irecv(U_old + (nN + 1) * (NP + 1), NP + 1, MPI_DOUBLE, vizSul, 0, MPI_COMM_WORLD, &req[req_count++]);
+                }
+
+                // Sincronizar todas as requisições não bloqueantes
+                if (req_count > 0) {
+                    MPI_Waitall(req_count, req, MPI_STATUSES_IGNORE);
+                }
+            }
+
             m++;
         }
     }
