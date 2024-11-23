@@ -332,13 +332,13 @@ int main(int argc, char* argv[]) {
 
   if (myRank == 0) {
       cout << "#Versao Semaforo: Tempo = " << (double)(t_fim - t_ini) << " segundos ..." << "Tile de tamanho " << TILE << endl;
-/*
+
       // Abre um arquivo para saída dos dados
       ofstream outfile("output_data.txt");
       if (outfile.is_open()) {
           double x, y;
-          for (int i = 0; i < N; i++) {
-              for (int j = 0; j < N; j++) {
+          for (int i = 0; i < N; i=i+100) {
+              for (int j = 0; j < N; j=j+100) {
                   x = i * h;
                   y = j * h;
                   outfile << x << " " << y << " " << U_total[i*(NP+1)+j] << endl;
@@ -348,7 +348,7 @@ int main(int argc, char* argv[]) {
       } else {
           cerr << "Erro ao abrir o arquivo para escrita." << endl;
       }
-*/
+
       free(U_total);
       free(recvcounts);
       free(displs);
