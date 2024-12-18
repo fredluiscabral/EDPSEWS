@@ -1,5 +1,6 @@
 #!/bin/bash
 
+
 # Verifica se o arquivo foi passado como parâmetro
 if [ "$#" -ne 1 ]; then
   echo "Uso: $0 <arquivo_de_saida>"
